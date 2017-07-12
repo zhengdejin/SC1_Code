@@ -603,6 +603,8 @@ static struct platform_device mt6575_TVOUT_dev = {
 	}
 };
 #endif
+
+
 static struct platform_device mt_device_msdc[] =
 {
 #if defined(CFG_DEV_MSDC0)
@@ -660,7 +662,6 @@ static struct platform_device mt_device_msdc[] =
         },
     },
 #endif
-
 };
 
 /*=======================================================================*/
@@ -687,7 +688,6 @@ struct platform_device mt_rfkill_device = {
 /*=======================================================================*/
 /* HID Keyboard  add by zhangsg                                                 */
 /*=======================================================================*/
-
 #if defined(CONFIG_KEYBOARD_HID)
 static struct platform_device mt_hid_dev = {
     .name = "hid-keyboard",
@@ -698,7 +698,6 @@ static struct platform_device mt_hid_dev = {
 /*=======================================================================*/
 /* UIBC input device, add by Seraph                                      */
 /*=======================================================================*/
-
 #if defined(CONFIG_MTK_WFD_SUPPORT)
 static struct platform_device mt_uibc_dev = {
     .name = "uibc",
@@ -769,11 +768,10 @@ struct platform_device spm_mcdi_pdev = {
 /*=======================================================================*/
 /* MT6589 USIF-DUMCHAR                                                          */
 /*=======================================================================*/
-
 static struct platform_device dummychar_device =
 {
-       .name           = "dummy_char",
-        .id             = 0,
+    .name           = "dummy_char",
+    .id             = 0,
 };
 
 /*=======================================================================*/
@@ -781,10 +779,9 @@ static struct platform_device dummychar_device =
 /*=======================================================================*/
 static struct platform_device masp_device =
 {
-       .name           = "masp",
-       .id             = -1,
+    .name           = "masp",
+    .id             = -1,
 };
-
 
 /*=======================================================================*/
 /* MT6589 NAND                                                           */
@@ -1004,7 +1001,6 @@ static struct platform_device mt_device_i2c[] = {
 };
 
 
-
 static u64 mtk_smi_dmamask = ~(u32)0;
 
 static struct platform_device mtk_smi_dev = {
@@ -1104,7 +1100,6 @@ static void cmdline_filter(struct tag *cmdline_tag, char *default_cmdline)
 	cs = cmdline_tag->u.cmdline.cmdline;
 	ce = cs;
 	while((__u32)ce < (__u32)tag_next(cmdline_tag)) {
-
 	    while(*cs == ' ' || *cs == '\0') {
 	    	cs++;
 	    	ce = cs;
@@ -1113,19 +1108,19 @@ static void cmdline_filter(struct tag *cmdline_tag, char *default_cmdline)
 	    if (*ce == ' ' || *ce == '\0') {
 	    	for (i = 0; i < sizeof(undesired_cmds)/sizeof(char *); i++){
 	    	    if (memcmp(cs, undesired_cmds[i], strlen(undesired_cmds[i])) == 0) {
-			ck_f = 1;
-                        break;
-                    }
+					ck_f = 1;
+					break;
+				}
 	    	}
 
-                if(ck_f == 0){
-		    *ce = '\0';
-                    //Append to the default command line
-                    strcat(default_cmdline, " ");
-                    strcat(default_cmdline, cs);
-		}
-		ck_f = 0;
-	    	cs = ce + 1;
+            if(ck_f == 0){
+				*ce = '\0';
+				//Append to the default command line
+				strcat(default_cmdline, " ");
+				strcat(default_cmdline, cs);
+			}
+			ck_f = 0;
+			cs = ce + 1;
 	    }
 	    ce++;
 	}
@@ -1141,7 +1136,7 @@ static int __init parse_tag_videofb_fixup(const struct tag *tags)
 {
 	bl_fb.base = tags->u.videolfb.lfb_base;
 	bl_fb.size = tags->u.videolfb.lfb_size;
-        use_bl_fb++;
+    use_bl_fb++;
 	return 0;
 }
 
@@ -1617,6 +1612,11 @@ static struct platform_device actuator_dev = {
 	.name		  = "lens_actuator",
 	.id		  = -1,
 };
+static struct platform_device actuator_dev_1 = {	// add for support 2nd lens by TK
+	.name		  = "lens_actuator_1",
+	.id		  = -1,
+};
+
 /*=======================================================================*/
 /* MT6575 jogball                                                        */
 /*=======================================================================*/
@@ -1701,10 +1701,10 @@ __init int mt_board_init(void)
     }
 #endif
 #ifdef CONFIG_FIQ_DEBUGGER
-        retval = platform_device_register(&mt_fiq_debugger);
-        if (retval != 0){
-                return retval;
-        }
+	retval = platform_device_register(&mt_fiq_debugger);
+	if (retval != 0){
+			return retval;
+	}
 #endif
 
 	{
@@ -1774,20 +1774,20 @@ __init int mt_board_init(void)
 	//i2c_register_board_info(0, i2c_devs0, ARRAY_SIZE(i2c_devs0));
 	//i2c_register_board_info(1, i2c_devs1, ARRAY_SIZE(i2c_devs1));
 	//i2c_register_board_info(2, i2c_devs2, ARRAY_SIZE(i2c_devs2));
-		for (i = 0; i < ARRAY_SIZE(mt_device_i2c); i++){
-			retval = platform_device_register(&mt_device_i2c[i]);
-			if (retval != 0){
-				return retval;
-			}
+	for (i = 0; i < ARRAY_SIZE(mt_device_i2c); i++){
+		retval = platform_device_register(&mt_device_i2c[i]);
+		if (retval != 0){
+			return retval;
 		}
+	}
 #endif
 #if defined(CONFIG_MTK_MMC)
     for (i = 0; i < ARRAY_SIZE(mt_device_msdc); i++){
         retval = platform_device_register(&mt_device_msdc[i]);
-			if (retval != 0){
-				return retval;
-			}
+		if (retval != 0){
+			return retval;
 		}
+	}
 #endif
 
 #if defined(CONFIG_MTK_SOUND)
@@ -1827,21 +1827,18 @@ __init int mt_board_init(void)
         return retval;
     }
 
-//=====SMI/M4U devices===========
+	//=====SMI/M4U devices===========
     printk("register MTK_SMI device\n");
     retval = platform_device_register(&mtk_smi_dev);
     if (retval != 0) {
         return retval;
     }
-
-
-//===========================
+	//===========================
 
 #ifdef MTK_MT8193_SUPPORT
     printk("register 8193_CKGEN device\n");
     retval = platform_device_register(&mtk_ckgen_dev);
     if (retval != 0){
-
         printk("register 8193_CKGEN device FAILS!\n");
         return retval;
     }
@@ -1858,12 +1855,11 @@ __init int mt_board_init(void)
     }
 #endif // 1
 
-printk("register M4U device: %d\n", retval);
-retval = platform_device_register(&mtk_m4u_dev);
-if (retval != 0) {
-	return retval;
-}
-
+	printk("register M4U device: %d\n", retval);
+	retval = platform_device_register(&mtk_m4u_dev);
+	if (retval != 0) {
+		return retval;
+	}
 
 #if defined(CONFIG_MTK_FB)
     /*
@@ -1937,69 +1933,52 @@ if (retval != 0) {
 	}
 #endif
 
-
 #if defined(CONFIG_MTK_SPI)
 //    spi_register_board_info(spi_board_devs, ARRAY_SIZE(spi_board_devs));
     platform_device_register(&mt_spi_device);
 #endif
 
-
-
-
-
-
 #if defined(MTK_TVOUT_SUPPORT)
     retval = platform_device_register(&mt6575_TVOUT_dev);
 	printk("register TV-out device\n");
     if (retval != 0) {
-         return retval;
+		return retval;
     }
 #endif
 
 #if 1
-  retval = platform_device_register(&auxadc_device);
-  if(retval != 0)
-  {
-     printk("****[auxadc_driver] Unable to device register(%d)\n", retval);
-	 return retval;
-  }
+	retval = platform_device_register(&auxadc_device);
+	if(retval != 0) {
+		printk("****[auxadc_driver] Unable to device register(%d)\n", retval);
+		return retval;
+	}
 #endif
 
 #if defined(CONFIG_MTK_ACCDET)
-
-
     retval = platform_device_register(&accdet_device);
 	printk("register accdet device\n");
 
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		printk("platform_device_accdet_register error:(%d)\n", retval);
 		return retval;
 	}
-	else
-	{
+	else {
 		printk("platform_device_accdet_register done!\n");
 	}
-
 #endif
 
 #if defined(CONFIG_USB_MTK_ACM_TEMP)
-
     retval = platform_device_register(&usbacm_temp_device);
 	printk("register usbacm temp device\n");
 
-	if (retval != 0)
-	{
+	if (retval != 0) {
 		printk("platform_device_usbacm_register error:(%d)\n", retval);
 		return retval;
 	}
-	else
-	{
+	else {
 		printk("platform_device_usbacm_register done!\n");
 	}
-
 #endif
-
 
 #if 0 //defined(CONFIG_MDP_MT6575)
     //printk("[MDP]platform_device_register\n\r");
@@ -2010,24 +1989,13 @@ if (retval != 0) {
 #endif
 
 #if defined(CONFIG_MTK_SENSOR_SUPPORT)
-
 	retval = platform_device_register(&hwmon_sensor);
 	printk("hwmon_sensor device!");
 	if (retval != 0)
 		return retval;
 
-	retval = platform_device_register(&batch_sensor);
-    printk("[%s]: batch_sensor, retval=%d \n!", __func__, retval);
-	if (retval != 0)
-		return retval;
-
 	retval = platform_device_register(&acc_sensor);
     printk("[%s]: acc_sensor, retval=%d \n!", __func__, retval);
-	if (retval != 0)
-		return retval;
-
-	retval = platform_device_register(&mag_sensor);
-    printk("[%s]: mag_sensor, retval=%d \n!", __func__, retval);
 	if (retval != 0)
 		return retval;
 
@@ -2041,34 +2009,11 @@ if (retval != 0) {
 	if (retval != 0)
 		return retval;
 
-	retval = platform_device_register(&barometer_sensor);
-    printk("[%s]: barometer_sensor, retval=%d \n!", __func__, retval);
-	if (retval != 0)
-		return retval;
-
-	retval = platform_device_register(&temp_sensor);
-    printk("[%s]: temp_sensor, retval=%d \n!", __func__, retval);
-	if (retval != 0)
-		return retval;
-
 #if defined(CONFIG_CUSTOM_KERNEL_ACCELEROMETER)
 	retval = platform_device_register(&sensor_gsensor);
 		printk("sensor_gsensor device!");
 	if (retval != 0)
 		return retval;
-#endif
-
-#if defined(CONFIG_CUSTOM_KERNEL_MAGNETOMETER)
-	retval = platform_device_register(&sensor_msensor);
-		printk("sensor_msensor device!");
-	if (retval != 0)
-		return retval;
-
-	retval = platform_device_register(&sensor_orientation);
-		printk("sensor_osensor device!");
-	if (retval != 0)
-		return retval;
-
 #endif
 
 #if defined(CONFIG_CUSTOM_KERNEL_GYROSCOPE)
@@ -2078,24 +2023,9 @@ if (retval != 0) {
 		return retval;
 #endif
 
-#if defined(CONFIG_CUSTOM_KERNEL_BAROMETER)
-	retval = platform_device_register(&sensor_barometer);
-		printk("sensor_barometer device!");
-	if (retval != 0)
-		return retval;
-#endif
-
 #if defined(CONFIG_CUSTOM_KERNEL_ALSPS)
 	retval = platform_device_register(&sensor_alsps);
 		printk("sensor_alsps device!");
-	if (retval != 0)
-		return retval;
-#endif
-
-#if defined(CONFIG_CUSTOM_KERNEL_TEMPERATURE)
-	retval = platform_device_register(&sensor_temperature);
-    printk("[%s]: sensor_temperature, retval=%d \n!", __func__, retval);
-		printk("sensor_temperature device!");
 	if (retval != 0)
 		return retval;
 #endif
@@ -2133,6 +2063,7 @@ if (retval != 0) {
         return retval;
     }
 #endif
+
 #if defined(CUSTOM_KERNEL_OFN)
     retval = platform_device_register(&ofn_driver);
     if (retval != 0){
@@ -2146,7 +2077,6 @@ retval = platform_device_register(&dummychar_device);
 		return retval;
 	}
 #endif
-
 
 #if defined(CONFIG_ANDROID_PMEM)
     pdata_multimedia.start = PMEM_MM_START;;
@@ -2229,8 +2159,12 @@ retval = platform_device_register(&dummychar_device);
         return retval;
     }
 #endif
-
-
+#if 1  //defined(CONFIG_ACTUATOR)	// add for support 2nd lens by TK
+    retval = platform_device_register(&actuator_dev_1);
+    if (retval != 0){
+        return retval;
+    }
+#endif
 
 //
 //=======================================================================
@@ -2275,7 +2209,6 @@ retval = platform_device_register(&dummychar_device);
 	if (retval != 0){
 		return retval;
 	}
-
 
 #if 1//defined(CONFIG_MTK_NFC) //NFC
 	retval = platform_device_register(&mtk_nfc_6605_dev);
@@ -2327,30 +2260,30 @@ retval = platform_device_register(&dummychar_device);
  */
 int is_pmem_range(unsigned long *base, unsigned long size)
 {
-        unsigned long start = (unsigned long)base;
-        unsigned long end = start + size;
+	unsigned long start = (unsigned long)base;
+	unsigned long end = start + size;
 
-        //printk("[PMEM] start=0x%p,end=0x%p,size=%d\n", start, end, size);
-        //printk("[PMEM] PMEM_MM_START=0x%p,PMEM_MM_SIZE=%d\n", PMEM_MM_START, PMEM_MM_SIZE);
+	//printk("[PMEM] start=0x%p,end=0x%p,size=%d\n", start, end, size);
+	//printk("[PMEM] PMEM_MM_START=0x%p,PMEM_MM_SIZE=%d\n", PMEM_MM_START, PMEM_MM_SIZE);
 
-        if (start < PMEM_MM_START)
-                return 0;
-        if (end >= PMEM_MM_START + PMEM_MM_SIZE)
-                return 0;
+	if (start < PMEM_MM_START)
+		return 0;
+	if (end >= PMEM_MM_START + PMEM_MM_SIZE)
+		return 0;
 
-        return 1;
+	return 1;
 }
 EXPORT_SYMBOL(is_pmem_range);
 
 // return the actual physical DRAM size
 unsigned int mtk_get_max_DRAM_size(void)
 {
-        return kernel_mem_sz + RESERVED_MEM_MODEM;
+	return kernel_mem_sz + RESERVED_MEM_MODEM;
 }
 
 resource_size_t get_actual_DRAM_size(void)
 {
-        return bl_mem_sz;
+	return bl_mem_sz;
 }
 EXPORT_SYMBOL(get_actual_DRAM_size);
 
@@ -2379,7 +2312,7 @@ void mt_reserve(void)
 #if defined(CONFIG_MTK_RAM_CONSOLE_USING_DRAM)
     memblock_reserve(CONFIG_MTK_RAM_CONSOLE_DRAM_ADDR, CONFIG_MTK_RAM_CONSOLE_DRAM_SIZE);
 #endif
-        mrdump_mini_reserve_memory();
+	mrdump_mini_reserve_memory();
 
     /*
      * Dynamic reserved memory (by arm_memblock_steal)

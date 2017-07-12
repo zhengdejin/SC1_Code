@@ -12,6 +12,17 @@
 #include "disp_drv.h"
 #include "ddp_hal.h"
 
+#ifdef BUILD_LK
+#include <platform/mt_gpio.h>
+#include <platform/mt_pmic.h>
+#elif defined(BUILD_UBOOT)
+#include <asm/arch/mt_gpio.h>
+#else
+#include <mach/mt_gpio.h>
+#include <mach/mt_pm_ldo.h>
+#endif
+#include <cust_gpio_usage.h>
+
 #include <cust_leds.h>
 #include <cust_leds_def.h>
 
@@ -32,7 +43,8 @@ static int gBLSMutexID = 3;
 #endif
 static int gBLSPowerOn = 0;
 #endif
-static int gMaxLevel = 1023;
+static unsigned int gMaxLevel = 1023;
+static unsigned int gLimitedMaxLevel = 870;		//add by baohm limite 15% max
 static int gPWMDiv = PWM_DEFAULT_DIV_VALUE;
 
 static DEFINE_MUTEX(backlight_mutex);
@@ -149,9 +161,10 @@ static unsigned int brightness_mapping(unsigned int level)
 
     mapped_level = level;
 
-    if (mapped_level > gMaxLevel)
-        mapped_level = gMaxLevel;
-
+    if (mapped_level > gLimitedMaxLevel)		//add by baohm for lcd backlight reverse for P1 hw
+        mapped_level = gLimitedMaxLevel;
+ 	
+	mapped_level = gMaxLevel - mapped_level;  
 	return mapped_level;
 }
 
@@ -559,9 +572,13 @@ int disp_bls_set_backlight(unsigned int level)
         regVal = DISP_REG_GET(DISP_REG_BLS_EN);
         if (!(regVal & 0x10000))
             DISP_REG_SET(DISP_REG_BLS_EN, regVal | 0x10000);
+		
+		mt_set_gpio_out(GPIO_LCM_BL_EN,GPIO_OUT_ONE);
     }
     else
     {
+		mt_set_gpio_out(GPIO_LCM_BL_EN,GPIO_OUT_ZERO);
+		
         regVal = DISP_REG_GET(DISP_REG_BLS_EN);
         if (regVal & 0x10000)
             DISP_REG_SET(DISP_REG_BLS_EN, regVal & 0xFFFEFFFF);

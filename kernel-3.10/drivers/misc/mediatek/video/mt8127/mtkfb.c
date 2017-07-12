@@ -19,7 +19,7 @@
 #include <linux/file.h>
 #include <linux/ion_drv.h>
 #include <linux/list.h>
-
+#include <linux/wakelock.h>
 
 #include <asm/uaccess.h>
 #include <asm/atomic.h>
@@ -170,6 +170,8 @@ extern unsigned int disp_running;
 extern wait_queue_head_t disp_done_wq;
 
 DEFINE_MUTEX(ScreenCaptureMutex);
+static struct wake_lock mtkfb_wake_lock;
+static bool is_wake_lock;
 
 BOOL is_early_suspended = FALSE;
 static int sem_flipping_cnt = 1;
@@ -2450,6 +2452,8 @@ static int mtkfb_ioctl(struct file *file, struct fb_info *info, unsigned int cmd
 
         if (Disp_Ovl_Engine_Check_WFD_Instance()) {
             MTKFB_LOG("MTKFB_POWEROFF wfd connect\n");
+            wake_lock(&mtkfb_wake_lock);
+            is_wake_lock = true;
             return r;
         }
 
@@ -2532,6 +2536,12 @@ static int mtkfb_ioctl(struct file *file, struct fb_info *info, unsigned int cmd
             MMProfileLog(MTKFB_MMP_Events.EarlySuspend, MMProfileFlagEnd);
             return -ERESTARTSYS;
         }
+
+        if (is_wake_lock) {
+            wake_unlock(&mtkfb_wake_lock);
+            is_wake_lock = false;
+        }
+
         disp_path_clock_on("mtkfb");
         DISP_CHECK_RET(DISP_PauseVsync(FALSE));
         DISP_CHECK_RET(DISP_PowerEnable(TRUE));
@@ -3548,6 +3558,8 @@ static void mtkfb_early_suspend(struct early_suspend *h)
         up(&sem_early_suspend);
         MTKFB_LOG("[FB driver] wfd connect\n");
         mutex_unlock(&ScreenCaptureMutex);
+        wake_lock(&mtkfb_wake_lock);
+        is_wake_lock = true;
         return;
     }
 
@@ -3607,6 +3619,11 @@ static void mtkfb_late_resume(struct early_suspend *h)
     pr_info("[FB Driver] enter late_resume\n");
 
     mutex_lock(&ScreenCaptureMutex);
+
+    if (is_wake_lock) {
+        wake_unlock(&mtkfb_wake_lock);
+        is_wake_lock = false;
+    }
     
     sem_early_suspend_cnt--;
     if(!is_early_suspended){
@@ -3627,9 +3644,14 @@ static void mtkfb_late_resume(struct early_suspend *h)
     {
         atomic_set(&OverlaySettingDirtyFlag, 0);
         disp_path_clock_on("ipoh_mtkfb");
+        is_ipoh_bootup =false;
+        is_early_suspended = FALSE;
+        up(&sem_early_suspend);
+        mutex_unlock(&ScreenCaptureMutex);
+        return;
     }
-    else
-        disp_path_clock_on("mtkfb");
+
+    disp_path_clock_on("mtkfb");
     pr_info("[FB LR] 1\n");
     DISP_CHECK_RET(DISP_PauseVsync(FALSE));
     pr_info("[FB LR] 2\n");
@@ -3788,6 +3810,9 @@ int __init mtkfb_init(void)
 #ifdef CONFIG_HAS_EARLYSUSPEND
     register_early_suspend(&mtkfb_early_suspend_handler);
 #endif
+
+    wake_lock_init(&mtkfb_wake_lock, WAKE_LOCK_SUSPEND, "mtkfb_wake_lock");
+    is_wake_lock = false;
 
     DBG_Init();
 

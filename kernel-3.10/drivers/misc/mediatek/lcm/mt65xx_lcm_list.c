@@ -236,6 +236,8 @@ extern LCM_DRIVER nt35510_dsi_cmd_lcm_drv;
 extern LCM_DRIVER rm69032_dsi_cmd_lcm_drv;
 extern LCM_DRIVER st7789h2_dbi_lcm_drv;
 extern LCM_DRIVER ek79007_wsvgalnl_dsi_vdo_lcm_drv;
+extern LCM_DRIVER hx8260a_wxga_dsi_vdo_lcm_drv;
+
 
 LCM_DRIVER* lcm_driver_list[] =
 {
@@ -1089,6 +1091,11 @@ LCM_DRIVER* lcm_driver_list[] =
 #if defined(ST7789H2_DBI)
 	&st7789h2_dbi_lcm_drv,
 #endif
+
+//#if defined(hx8260a_wxga_dsi_vdo)
+	&hx8260a_wxga_dsi_vdo_lcm_drv,
+//#endif
+
 };
 
 #define LCM_COMPILE_ASSERT(condition) LCM_COMPILE_ASSERT_X(condition, __LINE__)
@@ -1096,7 +1103,7 @@ LCM_DRIVER* lcm_driver_list[] =
 #define LCM_COMPILE_ASSERT_XX(condition, line) char assertion_failed_at_line_##line[(condition)?1:-1]
 
 unsigned int lcm_count = sizeof(lcm_driver_list)/sizeof(LCM_DRIVER*);
-LCM_COMPILE_ASSERT(0 != sizeof(lcm_driver_list)/sizeof(LCM_DRIVER*));
+/*LCM_COMPILE_ASSERT(0 != sizeof(lcm_driver_list)/sizeof(LCM_DRIVER*));*/
 #if defined(NT35520_HD720_DSI_CMD_TM) | defined(NT35520_HD720_DSI_CMD_BOE) | defined(NT35521_HD720_DSI_VDO_BOE) | defined(NT35521_HD720_DSI_VIDEO_TM)
 #ifdef BUILD_LK
 extern void mdelay(unsigned long msec);

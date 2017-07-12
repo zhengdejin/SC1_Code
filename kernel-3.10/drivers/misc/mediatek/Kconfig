@@ -349,5 +349,7 @@ source "drivers/misc/mediatek/shake_sensor/Kconfig"
 source "drivers/misc/mediatek/step_counter/Kconfig"
 source "drivers/misc/mediatek/tilt_detector_sensor/Kconfig"
 source "drivers/misc/mediatek/wake_gesture_sensor/Kconfig"
+source "drivers/misc/mediatek/cc2530_zigbee/Kconfig"
+##source "drivers/misc/mediatek/ir_scm/Kconfig"
 
 endif

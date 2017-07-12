@@ -229,9 +229,8 @@ static const struct file_operations config_proc_ops = {
     .write = gt91xx_config_write_proc,
 };
 
-//#define VELOCITY_CUSTOM	// GD: commit out temporary
-//#ifdef VELOCITY_CUSTOM
-#if 0
+#define VELOCITY_CUSTOM
+#ifdef VELOCITY_CUSTOM
 #include <linux/device.h>
 #include <linux/miscdevice.h>
 #include <asm/uaccess.h>
@@ -683,8 +682,7 @@ int i2c_read_bytes_non_dma(struct i2c_client *client, u16 addr, u8 *rxbuf, int l
     {
         {
             //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_ENEXT_FLAG)),
-            //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
-            .addr = (client->addr &I2C_MASK_FLAG),		// GD: changed for I2C read/write
+            .addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
             .flags = 0,
             .buf = buffer,
             .len = GTP_ADDR_LENGTH,
@@ -692,8 +690,7 @@ int i2c_read_bytes_non_dma(struct i2c_client *client, u16 addr, u8 *rxbuf, int l
         },
         {
             //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_ENEXT_FLAG)),
-            //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
-            .addr = (client->addr &I2C_MASK_FLAG),		// GD: changed for I2C read/write
+            .addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
             .flags = I2C_M_RD,
             .timing = I2C_MASTER_CLOCK
         },
@@ -819,13 +816,11 @@ int i2c_write_bytes_non_dma(struct i2c_client *client, u16 addr, u8 *txbuf, int 
     u16 left = len;
     u16 offset = 0;
     u8 retry = 0;
-	GTP_DEBUG_FUNC();
 
     struct i2c_msg msg =
     {
         //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_ENEXT_FLAG)),
-        //.addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
-        .addr = (client->addr &I2C_MASK_FLAG),		// GD: changed for I2C read/write
+        .addr = ((client->addr &I2C_MASK_FLAG) | (I2C_PUSHPULL_FLAG)),
         .flags = 0,
         .buf = buffer,
         .timing = I2C_MASTER_CLOCK,
@@ -1302,7 +1297,7 @@ static s8 gtp_i2c_test(struct i2c_client *client)
     s8 ret = -1;
     u32 hw_info = 0;
 
-//    GTP_DEBUG_FUNC();
+    GTP_DEBUG_FUNC();
 
     while (retry++ < 5)
     {
@@ -1310,7 +1305,6 @@ static s8 gtp_i2c_test(struct i2c_client *client)
 
         if ((!ret) && (hw_info == 0x00900600))              //20121212
         {
-//        	GTP_ERROR("[OK]GTP_REG_HW_INFO : %08X", hw_info);
             return ret;
         }
 
@@ -1910,15 +1904,15 @@ static s32 tpd_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
     {
         GTP_ERROR("I2C communication ERROR!");
     }
+    
+#ifdef VELOCITY_CUSTOM
 
-//#ifdef VELOCITY_CUSTOM
-#if 0
     if ((err = misc_register(&tpd_misc_device)))
     {
         printk("mtk_tpd: tpd_misc_device register failed\n");
     }
-#endif
 
+#endif
     ret = gtp_read_version(client, &version_info);
 
     if (ret < 0)
@@ -1992,13 +1986,11 @@ static s32 tpd_i2c_probe(struct i2c_client *client, const struct i2c_device_id *
 #else
       if (!int_type)	//EINTF_TRIGGER
     {
-        mt_eint_registration(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_RISING, tpd_eint_interrupt_handler, 1);
-		GTP_INFO("CUST_EINT_TOUCH_PANEL_NUM.===>EINTF_TRIGGER_RISING");
-	 }
+        mt_eint_registration(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_RISING, tpd_eint_interrupt_handler, 0);
+    }
     else
     {
-    	GTP_INFO("CUST_EINT_TOUCH_PANEL_NUM.===>EINTF_TRIGGER_FALLING");
-        mt_eint_registration(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_FALLING, tpd_eint_interrupt_handler, 1);// disable auto-unmask
+        mt_eint_registration(CUST_EINT_TOUCH_PANEL_NUM, EINTF_TRIGGER_FALLING, tpd_eint_interrupt_handler, 0);// disable auto-unmask
     }
 #endif
 
@@ -2090,7 +2082,7 @@ static void force_reset_guitar(void)
 
     // Power on TP
     #ifdef TPD_POWER_SOURCE_CUSTOM
-        hwPowerOn(TPD_POWER_SOURCE_CUSTOM, VOL_3300, "TP");
+        hwPowerOn(TPD_POWER_SOURCE_CUSTOM, VOL_2800, "TP");
     #else
         hwPowerOn(MT65XX_POWER_LDO_VGP2, VOL_2800, "TP");
     #endif
@@ -2817,11 +2809,10 @@ static int tpd_local_init(void)
         return -1;
     }
 
-	input_set_abs_params(tpd->dev, ABS_MT_TRACKING_ID, 0, (GTP_MAX_TOUCH-1), 0, 0);
 #ifdef TPD_HAVE_BUTTON
     tpd_button_setting(TPD_KEY_COUNT, tpd_keys_local, tpd_keys_dim_local);// initialize tpd button data
 #endif
-	
+
 #if (defined(TPD_WARP_START) && defined(TPD_WARP_END))
     TPD_DO_WARP = 1;
     memcpy(tpd_wb_start, tpd_wb_start_local, TPD_WARP_CNT * 4);
@@ -3238,7 +3229,7 @@ static int __init tpd_driver_init(void)
 #ifdef MT6572
     i2c_register_board_info(I2C_BUS_NUMBER, &i2c_tpd, 1);
 #else
-    i2c_register_board_info(I2C_BUS_NUMBER, &i2c_tpd, 1);
+    i2c_register_board_info(0, &i2c_tpd, 1);
 #endif
     if (tpd_driver_add(&tpd_device_driver) < 0)
         GTP_INFO("add generic driver failed\n");

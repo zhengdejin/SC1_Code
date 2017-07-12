@@ -1,8 +1,9 @@
 include $(srctree)/drivers/misc/mediatek/Makefile.custom
 
-obj-y   :=  goodix_tool.o
-obj-y   +=  gt9xx_driver.o
-obj-y   +=  gt9xx_update.o
+obj-y	+=  goodix_tool.o
+obj-y	+=  gt9xx_driver.o
+obj-y	+=  gt9xx_update.o
+obj-y	+=  gt9xx_openshort.o
 obj-y   +=  mtk_tpd.o
 obj-y   +=  tpd_button.o
 obj-y   +=  tpd_calibrate.o

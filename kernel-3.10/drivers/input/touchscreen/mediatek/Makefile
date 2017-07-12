@@ -140,3 +140,7 @@ endif
 ifeq ($(CONFIG_MTK_GT911),y)
 obj-y	+=  GT911/
 endif
+
+ifeq ($(CONFIG_MTK_GT911_NEW),y)
+obj-y	+=  GT911_NEW/
+endif

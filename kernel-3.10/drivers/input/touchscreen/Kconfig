@@ -493,6 +493,10 @@ config GT9XX_2
 config MTK_GT911
         bool "GT911 for Mediatek package"
         default n
+		
+config MTK_GT911_NEW
+        bool "GT911_NEW for Mediatek package"
+        default n
         
 config MTK_MMS244
         bool "MMS244 for Mediatek package"

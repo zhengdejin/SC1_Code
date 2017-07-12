@@ -390,7 +390,7 @@ int mt_led_blink_pmic(enum mt65xx_led_pmic pmic_type, struct nled_setting* led) 
 			  upmu_set_rg_isink0_ck_pdn(0);
 			  upmu_set_rg_isink0_ck_sel(0);
 			  upmu_set_isink_ch0_mode(PMIC_PWM_0);
-			  upmu_set_isink_ch0_step(0x3);//16mA
+			  upmu_set_isink_ch0_step(0x0);//4mA
 			  upmu_set_isink_dim0_duty(duty);
 			  upmu_set_isink_dim0_fsel(pmic_freqsel_array[time_index]);
 			  upmu_set_isink_breath0_trf_sel(0x0);
@@ -403,7 +403,7 @@ int mt_led_blink_pmic(enum mt65xx_led_pmic pmic_type, struct nled_setting* led) 
 			  upmu_set_rg_isink1_ck_pdn(0);
 			  upmu_set_rg_isink1_ck_sel(0);
 			  upmu_set_isink_ch1_mode(PMIC_PWM_0);
-			  upmu_set_isink_ch1_step(0x3);//16mA
+			  upmu_set_isink_ch1_step(0x0);//4mA
 			  upmu_set_isink_dim1_duty(duty);
 			  upmu_set_isink_dim1_fsel(pmic_freqsel_array[time_index]);
 			  upmu_set_isink_breath1_trf_sel(0x0);
@@ -416,7 +416,7 @@ int mt_led_blink_pmic(enum mt65xx_led_pmic pmic_type, struct nled_setting* led) 
 			  upmu_set_rg_isink2_ck_pdn(0);
 			  upmu_set_rg_isink2_ck_sel(0);
 			  upmu_set_isink_ch2_mode(PMIC_PWM_0);
-			  upmu_set_isink_ch2_step(0x3);//16mA
+			  upmu_set_isink_ch2_step(0x0);//4mA
 			  upmu_set_isink_dim2_duty(duty);
 			  upmu_set_isink_dim2_fsel(pmic_freqsel_array[time_index]);
 			  upmu_set_isink_breath2_trf_sel(0x0);
@@ -429,7 +429,7 @@ int mt_led_blink_pmic(enum mt65xx_led_pmic pmic_type, struct nled_setting* led) 
 			  upmu_set_rg_isink3_ck_pdn(0);
 			  upmu_set_rg_isink3_ck_sel(0);
 			  upmu_set_isink_ch3_mode(PMIC_PWM_0);
-			  upmu_set_isink_ch3_step(0x3);//16mA
+			  upmu_set_isink_ch3_step(0x0);//4mA
 			  upmu_set_isink_dim3_duty(duty);
 			  upmu_set_isink_dim3_fsel(pmic_freqsel_array[time_index]);
 			  upmu_set_isink_breath3_trf_sel(0x0);
@@ -1102,7 +1102,7 @@ int mt_brightness_set_pmic(enum mt65xx_led_pmic pmic_type, u32 level, u32 div)
 				upmu_set_rg_isink0_ck_pdn(0);
 				upmu_set_rg_isink0_ck_sel(0);
 				upmu_set_isink_ch0_mode(PMIC_PWM_0);
-				upmu_set_isink_ch0_step(0x3);//16mA
+				upmu_set_isink_ch0_step(0x0);//4mA
 				//hwPWMsetting(PMIC_PWM_1, 15, 8);
 				upmu_set_isink_dim0_duty(15);
 				upmu_set_isink_dim0_fsel(0);//6323 1KHz
@@ -1137,7 +1137,7 @@ int mt_brightness_set_pmic(enum mt65xx_led_pmic pmic_type, u32 level, u32 div)
 				upmu_set_rg_isink1_ck_pdn(0);
 				upmu_set_rg_isink1_ck_sel(0);
 				upmu_set_isink_ch1_mode(PMIC_PWM_0);
-				upmu_set_isink_ch1_step(0x3);//16mA
+				upmu_set_isink_ch1_step(0x0);//4mA
 				//hwPWMsetting(PMIC_PWM_2, 15, 8);
 				upmu_set_isink_dim1_duty(15);
 				upmu_set_isink_dim1_fsel(0);//6323 1KHz
@@ -1177,7 +1177,7 @@ int mt_brightness_set_pmic(enum mt65xx_led_pmic pmic_type, u32 level, u32 div)
 				upmu_set_rg_isink2_ck_pdn(0);
 				upmu_set_rg_isink2_ck_sel(0);
 				upmu_set_isink_ch2_mode(PMIC_PWM_0);
-				upmu_set_isink_ch2_step(0x3);//16mA
+				upmu_set_isink_ch2_step(0x0);//4mA
 				//hwPWMsetting(PMIC_PWM_2, 15, 8);
 				upmu_set_isink_dim2_duty(15);
 				upmu_set_isink_dim2_fsel(0);//6323 1KHz
@@ -1210,7 +1210,7 @@ int mt_brightness_set_pmic(enum mt65xx_led_pmic pmic_type, u32 level, u32 div)
 				upmu_set_rg_isink3_ck_pdn(0);
 				upmu_set_rg_isink3_ck_sel(0);
 				upmu_set_isink_ch3_mode(PMIC_PWM_0);
-				upmu_set_isink_ch3_step(0x3);//16mA
+				upmu_set_isink_ch3_step(0x0);//4mA
 				//hwPWMsetting(PMIC_PWM_1, 15, 8);
 				upmu_set_isink_dim3_duty(15);
 				upmu_set_isink_dim3_fsel(0);//6323 1KHz

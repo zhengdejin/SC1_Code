@@ -57,6 +57,7 @@
 //#include "mach/mt6575_clkmgr_internal.h"
 #include <mach/eint.h>
 #include <cust_eint.h>
+#include <cust_gpio_usage.h>    //add by yy
 //#include <cust_power.h>
 //#define MSDC_POWER_MC1 MSDC_VMC //Don't define this in local code!!!!!!
 //#define MSDC_POWER_MC2 MSDC_VGP6 //Don't define this in local code!!!!!!
@@ -990,18 +991,22 @@ static u32 msdc_ldo_power(u32 on, MT65XX_POWER powerId, MT65XX_POWER_VOLTAGE pow
         if (*status == 0) {  // can power on 
             printk(KERN_WARNING "msdc LDO<%d> power on<%d>\n", powerId, powerVolt); 	
             hwPowerOn(powerId, powerVolt, "msdc");
+			mt_set_gpio_out(GPIO_SD_PWR_EN_PIN, GPIO_OUT_ZERO);  //add by yy
             *status = powerVolt;             
         } else if (*status == powerVolt) {
             printk(KERN_ERR "msdc LDO<%d><%d> power on again!\n", powerId, powerVolt);	
         } else { // for sd3.0 later
             printk(KERN_WARNING "msdc LDO<%d> change<%d> to <%d>\n", powerId, *status, powerVolt);
-            hwPowerDown(powerId, "msdc");
-            hwPowerOn(powerId, powerVolt, "msdc");
+			mt_set_gpio_out(GPIO_SD_PWR_EN_PIN, GPIO_OUT_ONE);  //add by yy
+			hwPowerDown(powerId, "msdc");
+            hwPowerOn(powerId, powerVolt, "msdc");	
+			mt_set_gpio_out(GPIO_SD_PWR_EN_PIN, GPIO_OUT_ZERO);  //add by yy
             *status = powerVolt;	
         }
     } else {  // want to power off
         if (*status != 0) {  // has been powerred on
-            printk(KERN_WARNING "msdc LDO<%d> power off\n", powerId);   
+            printk(KERN_WARNING "msdc LDO<%d> power off\n", powerId);  
+			mt_set_gpio_out(GPIO_SD_PWR_EN_PIN, GPIO_OUT_ONE);  //add by yy
             hwPowerDown(powerId, "msdc");
             *status = 0;
         } else {

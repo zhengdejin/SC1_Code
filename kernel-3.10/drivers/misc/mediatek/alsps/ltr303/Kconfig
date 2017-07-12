@@ -1,0 +1,4 @@
+
+config MTK_LTR303
+	bool "LTR303 for MediaTek package"
+	default n

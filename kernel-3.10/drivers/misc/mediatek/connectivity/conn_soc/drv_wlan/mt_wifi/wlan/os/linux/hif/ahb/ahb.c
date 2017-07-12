@@ -1759,7 +1759,7 @@ static int HifAhbProbe(VOID)
 		/* hwPowerOn(MT6325_POWER_LDO_VCN33, VOL_3300, "WLAN"); */
 		mtk_wcn_consys_hw_wifi_paldo_ctrl(1);	/* switch to HW mode */
 #else				/*for MT6572/82/92 */
-		hwPowerOn(MT6323_POWER_LDO_VCN33_WIFI, VOL_3300, "WLAN");
+		hwPowerOn(MT6323_POWER_LDO_VCN33_WIFI, VOL_3500, "WLAN");		//change wifi power from 3.3V to 3.5V, add by baohm
 		upmu_set_vcn33_on_ctrl_wifi(1);	/* switch to HW mode */
 #endif
 #endif

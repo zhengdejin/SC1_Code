@@ -7,6 +7,8 @@ include $(srctree)/drivers/misc/mediatek/Makefile.custom
  
 ifeq ($(CONFIG_ARCH_MT8127),y)
 		obj-$(CONFIG_MTK_LENS_FM50AF_SUPPORT)      += mt8127/fm50af/
+		obj-$(CONFIG_MTK_LENS_DW9814AF_SUPPORT)    += mt8127/dw9814af/
+		obj-$(CONFIG_MTK_LENS_BU6424AF_SUPPORT)    += mt8127/bu6424af/
 else
 	ifeq ($(CONFIG_ARCH_MT6580),y)
 		obj-$(CONFIG_MTK_LENS_DW9814AF_SUPPORT)      += mt6580/dw9814af/

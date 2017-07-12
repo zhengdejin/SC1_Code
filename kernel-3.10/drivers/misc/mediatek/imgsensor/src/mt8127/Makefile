@@ -1,10 +1,11 @@
 include $(srctree)/drivers/misc/mediatek/Makefile.custom
 
 obj-y				+= kd_sensorlist.o
-
-obj-y				+= ov5648mipi_Sensor.o
-obj-y				+= ov2659yuv_Sensor.o
-obj-y				+= sp2518yuv_Sensor.o
+obj-y				+= ov5670mipi_Sensor.o
+obj-y               += hi551mipi_Sensor.o
+#obj-y               += s5k5e2yamipiraw_Sensor.o
+obj-y               += s5k5e2yamipiraw_back_Sensor.o
+obj-y               += s5k5e2yamipiraw_front_Sensor.o
 
 # $(CONFIG_MTK_PLATFORM)
 $(warning "xilog project is:$(ARCH_MTK_PROJECT)")
@@ -18,7 +19,7 @@ else
 		    ifeq ($(ARCH_MTK_PROJECT), tb8127p1_25)
 				  obj-y				+= ov5647_Sensor_p1_25.o
 			  else
-				  obj-y				+= ov5647_Sensor.o
+#				  obj-y				+= ov5647_Sensor.o
 			  endif
 		endif
 endif

@@ -126,7 +126,8 @@ NSFeature :  : RAWSensorInfo < _id >  :  : getFlickerPara \
 #define OV8825_SENSOR_ID                        0x8825
 #define OV7675_SENSOR_ID                        0x7673
 #define OV5693_SENSOR_ID                        0x5690
-#define OV5670MIPI_SENSOR_ID                    0x5670
+//#define OV5670MIPI_SENSOR_ID                    0x5670
+#define OV5670_SENSOR_ID                        0x5670
 #define OV5671MIPI_SENSOR_ID                    0x5671
 #define OV5650_SENSOR_ID                        0x5651
 #define OV5650MIPI_SENSOR_ID                    0x5651
@@ -162,6 +163,8 @@ NSFeature :  : RAWSensorInfo < _id >  :  : getFlickerPara \
 #define S5K53BEB_SENSOR_ID                      0x87A8
 #define S5K5BAFX_SENSOR_ID                      0x05BA
 #define S5K5E2YA_SENSOR_ID                      0x5e20
+#define S5K5E2YA_BACK_SENSOR_ID                 0x5e20
+#define S5K5E2YA_FRONT_SENSOR_ID                0x5e21
 #define S5K4H5YX_2LANE_SENSOR_ID                0x485B
 #define S5K4H5YC_SENSOR_ID                      0x485B
 #define S5K83AFX_SENSOR_ID                      0x01C4
@@ -172,7 +175,8 @@ NSFeature :  : RAWSensorInfo < _id >  :  : getFlickerPara \
 #define HI841_SENSOR_ID                         0x0841
 #define HI707_SENSOR_ID                         0x00b8
 #define HI704_SENSOR_ID                         0x0096
-#define HI551_SENSOR_ID                         0x0551
+//#define HI551_SENSOR_ID                         0x0551
+#define HI551MIPI_SENSOR_ID                     0x0551
 #define HI545MIPI_SENSOR_ID                     0x0545
 #define HI544MIPI_SENSOR_ID                     0x0544
 #define HI542_SENSOR_ID                         0x00B1
@@ -316,6 +320,8 @@ NSFeature :  : RAWSensorInfo < _id >  :  : getFlickerPara \
 #define SENSOR_DRVNAME_S5K5CAGX_YUV             "s5k5cagxyuv"
 #define SENSOR_DRVNAME_S5K4H5YX_2LANE_MIPI_RAW  "s5k4h5yx2lanemipiraw"
 #define SENSOR_DRVNAME_S5K5E2YA_MIPI_RAW        "s5k5e2yamipiraw"
+#define SENSOR_DRVNAME_BACK_S5K5E2YA_MIPI_RAW   "s5k5e2yamipiraw_back"
+#define SENSOR_DRVNAME_FRONT_S5K5E2YA_MIPI_RAW  "s5k5e2yamipiraw_front"
 #define SENSOR_DRVNAME_S5K8AAYX_MIPI_YUV        "s5k8aayxmipiyuv"
 #define SENSOR_DRVNAME_S5K8AAYX_YUV             "s5k8aayxyuv"
 /*HI*/
